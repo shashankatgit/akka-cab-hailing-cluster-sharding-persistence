@@ -1,5 +1,6 @@
 package pods.cabs;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,8 @@ import akka.cluster.sharding.typed.javadsl.ClusterSharding;
 import akka.cluster.sharding.typed.javadsl.Entity;
 import akka.cluster.sharding.typed.javadsl.EntityRef;
 import akka.persistence.typed.PersistenceId;
+import pods.cabs.utils.InitFileReader;
+import pods.cabs.utils.InitFileReader.InitReadWrapper;
 import pods.cabs.utils.Logger;
 
 public class App {
@@ -30,6 +33,16 @@ public class App {
 				}
 			}
 
+			InitReadWrapper wrapperObj = new InitReadWrapper();
+			Globals.initReadWrapperObj = wrapperObj;
+			try {
+				InitFileReader.readInitFile(wrapperObj);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.exit(1);
+			}
+			
 			startup(port, firstTimeFlag);
 		}
 	}
@@ -121,9 +134,9 @@ public class App {
 //		    	ref.tell(new RideService.Command());
 				}
 			}
-			
+
 			Logger.logErr("chkp1");
-			
+
 			EntityRef<Cab.Command> cabRef = sharding.entityRefFor(Cab.TypeKey, "101");
 			cabRef.tell(new Cab.Command());
 			return Behaviors.empty();
