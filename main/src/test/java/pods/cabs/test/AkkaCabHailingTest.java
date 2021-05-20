@@ -1,4 +1,4 @@
-package com.example;
+package pods.cabs.test;
 
 import akka.actor.testkit.typed.javadsl.TestKitJunitResource;
 
