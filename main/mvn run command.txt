@@ -1,0 +1,9 @@
+mvn exec:java -Dexec.mainClass="pods.cabs.App" -Dexec.args="25251 -firstTime"
+
+
+mvn exec:java -Dexec.mainClass="pods.cabs.App" -Dexec.args="25252 -firstTime"
+
+
+mvn test
+
+

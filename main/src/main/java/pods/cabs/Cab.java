@@ -32,7 +32,7 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 		String minorState;
 		long rideID;
 		long numRides;
-		long numRequestsRecvd;
+		long numRequestsRecvd = 0;
 		long curPos;
 		boolean lastRideReqAccepted;
 		long posAfterRideEnds;
@@ -42,8 +42,13 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 			this.majorState = CabStates.MajorStates.SIGNED_OUT;
 			this.minorState = CabStates.MinorStates.NONE;
 			this.numRides = 0;
-			this.numRequestsRecvd = 0;
 			this.curPos = -1;
+		}
+		
+		public String toString() {
+			return "majorState: "+majorState+", minorState: " + minorState + ", numRides: " +numRides
+					+", numRequestsRecvd: "+numRequestsRecvd+", curPos: " + curPos + ", lastRideReqAccepted: "
+					+ lastRideReqAccepted + ", posAfterRideEnds: "+posAfterRideEnds;
 		}
 
 	}
@@ -126,12 +131,10 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 	}
 
 	public static class DebugCabState extends Cab.Command {
-		String cabId;
 		ActorRef<Cab.DebugCabStateResponse> replyTo;
 
-		public DebugCabState(String cabId, ActorRef<Cab.DebugCabStateResponse> replyTo) {
+		public DebugCabState(ActorRef<Cab.DebugCabStateResponse> replyTo) {
 			super();
-			this.cabId = cabId;
 			this.replyTo = replyTo;
 		}
 	}
@@ -152,6 +155,11 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 			this.numRides = numRides;
 			this.numRequestsRecvd = numRequestsRecvd;
 		}
+		
+		public String toString() {
+			return "majorState: "+majorState+", minorState: " + minorState + ", numRides: " +numRides
+						+", numRequestsRecvd: "+numRequestsRecvd+", curPos: " + curPos;			
+		}
 	}
 
 	// ----------------- Define Events Here ------------------
@@ -159,7 +167,10 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 	// Base Event
 	public static class CabEvent implements CborSerializable {
 		int dummy;
-
+		
+		public CabEvent() {
+			dummy=1;
+		}
 	}
 
 	public static class SignInEvent extends CabEvent {
@@ -169,9 +180,11 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 			super();
 			this.initPos = initPos;
 		}
+		public SignInEvent() {}
 	}
 
 	public static class SignOutEvent extends CabEvent {
+		public SignOutEvent() {}
 	}
 
 	public static class RequestRideEvent extends CabEvent {
@@ -185,6 +198,7 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 			this.destPos = destPos;
 			this.rideId = rideId;
 		}
+		public RequestRideEvent() {}
 	}
 
 	public static class RideEndedEvent extends CabEvent {
@@ -194,9 +208,12 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 			super();
 			this.rideId = rideId;
 		}
+		
+		public RideEndedEvent() {}
 	}
 
 	public static class ResetEvent extends CabEvent {
+		public ResetEvent() {}
 	}
 
 	// ---------------- Define command handlers here ------------
@@ -278,8 +295,8 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 	}
 
 	public CabState onRequestRideEvent(CabState state, RequestRideEvent event) {
-		Logger.log(entityName + ": Received  RequestRideEvent");
-
+		Logger.log(entityName + ": Received RequestRideEvent");
+		
 		state.lastRideReqAccepted = false;
 		if (state.majorState == CabStates.MajorStates.SIGNED_IN
 				&& state.minorState == CabStates.MinorStates.AVAILABLE) {
@@ -297,7 +314,8 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 		} else {
 			Logger.logErr(entityName + ": RideRequest rejected as either cab not signed in or already giving ride");
 		}
-
+		
+//		Logger.logErr(entityName + ": RequestRideEvent : new numRequestsRecvd : " + state.numRequestsRecvd + ", new state : " + state.toString());
 		return state;
 	}
 
@@ -332,9 +350,6 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 		return state;
 	}
 	
-	
-	
-	
 
 	@Override
 	public CommandHandler<Command, CabEvent, CabState> commandHandler() {
@@ -354,7 +369,6 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 
 	@Override
 	public CabState emptyState() {
-		// TODO Auto-generated method stub
 		return new CabState();
 	}
 
