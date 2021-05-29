@@ -69,7 +69,6 @@ public class AkkaCabHailingTestPersistence {
 		cab101.tell(new Cab.DebugCabState(debugProbe.getRef()));
 		Cab.DebugCabStateResponse debugResponse = debugProbe.receiveMessage();
 		
-		Logger.logTestSuccess("Current State of the cab : " + debugResponse.toString());
 		
 		// Sign in the cab if it is not signed in and set it to available
 		if(debugResponse.majorState == CabStates.MajorStates.SIGNED_OUT) {
@@ -84,6 +83,11 @@ public class AkkaCabHailingTestPersistence {
 			
 			cab101.tell(new Cab.SignIn(10));
 		}
+		
+		cab101.tell(new Cab.DebugCabState(debugProbe.getRef()));
+		debugResponse = debugProbe.receiveMessage();
+		
+		Logger.logTestSuccess("Current State of the cab : " + debugResponse.toString());
 		
 		// Now we are sure that cab is signed in and ready for ride
 	

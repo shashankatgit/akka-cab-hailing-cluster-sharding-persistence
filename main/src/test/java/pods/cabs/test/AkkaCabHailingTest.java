@@ -171,8 +171,8 @@ public class AkkaCabHailingTest {
 		public void privateTestCase2() {
 			testInterface.startNewTest("Test 2 : Smallest Index Cab Assignment");
 			
-			testInterface.cabSignIn("101", 10);
-			testInterface.cabSignIn("103", 30);
+			testInterface.cabSignIn("102", 10);
+			testInterface.cabSignIn("104", 30);
 
 			
 			testInterface.sleep();
@@ -180,15 +180,15 @@ public class AkkaCabHailingTest {
 			RideService.RideResponse response;
 			
 			response = testInterface.requestRide("201", 45, 50);
-			assert(response.cabId.equals("101"));
+			assert(response.cabId.equals("102"));
 			
 			response = testInterface.requestRide("202", 5, 10);
-			assert(response.cabId.equals("103"));
+			assert(response.cabId.equals("104"));
 			
 		}
 		
 		
-		// What if the nearest cab doesn't accept the request. Second nearest cab (which is available and accepting)
+		// What if the cab with smaller index doesn't accept the request. A larger indexed cab (which is available and accepting)
 		// should be assigned.
 		public void privateTestCase3() {
 			testInterface.startNewTest("Test 3 : Second Nearest Cab Assignment");
