@@ -58,15 +58,18 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 	}
 
 	public static class SignIn extends Command {
-		long initialPos;
+		public long initialPos;
 
 		public SignIn(long initialPos) {
 			super();
 			this.initialPos = initialPos;
 		}
+		
+		public SignIn() {}
 	}
 
 	public static class SignOut extends Command {
+		public SignOut() {}
 	}
 
 	public static class RequestRide extends Command {
@@ -82,6 +85,8 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 			this.destLoc = destLoc;
 			this.rideId = rideId;
 		}
+		
+		public RequestRide() {}
 	}
 
 	public static class RideEnded extends Command {
@@ -91,6 +96,8 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 			super();
 			this.rideId = rideId;
 		}
+		
+		public RideEnded() {}
 	}
 
 	public static class NumRides extends Command {
@@ -100,6 +107,8 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 			super();
 			this.replyTo = replyTo;
 		}
+		
+		public NumRides() {}
 	}
 
 	public static class Reset extends Command {
@@ -109,6 +118,8 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 			super();
 			this.replyTo = replyTo;
 		}
+		
+		public Reset() {}
 	}
 
 	public static class NumRidesReponse extends Command {
@@ -128,6 +139,8 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 			NumRidesReponse numRidesReponse = (NumRidesReponse) o;
 			return numRidesReponse.numRides == this.numRides;
 		}
+		
+		public NumRidesReponse() {}
 	}
 
 	public static class DebugCabState extends Cab.Command {
@@ -137,6 +150,8 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 			super();
 			this.replyTo = replyTo;
 		}
+		
+		public DebugCabState() {}
 	}
 
 	public static class DebugCabStateResponse extends Cab.Command {
@@ -155,6 +170,8 @@ public class Cab extends EventSourcedBehavior<Cab.Command, Cab.CabEvent, Cab.Cab
 			this.numRides = numRides;
 			this.numRequestsRecvd = numRequestsRecvd;
 		}
+		
+		public DebugCabStateResponse() {}
 		
 		public String toString() {
 			return "majorState: "+majorState+", minorState: " + minorState + ", numRides: " +numRides

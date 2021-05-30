@@ -38,6 +38,8 @@ public class RideService extends AbstractBehavior<RideService.Command> {
 			this.destinationLoc = destinationLoc;
 			this.replyTo = replyTo;
 		}
+		
+		public RequestRide() {}
 	}
 	
 	
@@ -78,6 +80,8 @@ public class RideService extends AbstractBehavior<RideService.Command> {
 			this.cabId = cabId;
 //			this.fRide = fRide;
 		}
+		
+		public RideResponse() {}
 	}
 	
 	public Receive<RideService.Command> createReceive() {

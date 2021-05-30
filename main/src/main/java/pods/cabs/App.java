@@ -131,6 +131,7 @@ public class App {
 //		    	rideEntityId = "rideService"+(i);
 					Logger.logErr("creating rideService entity: " + rideEntityId);
 					EntityRef<RideService.Command> ref = sharding.entityRefFor(RideService.TypeKey, rideEntityId);
+					ref.tell(new RideService.Command());
 //		    	ref.tell(new RideService.Command());
 				}
 			}

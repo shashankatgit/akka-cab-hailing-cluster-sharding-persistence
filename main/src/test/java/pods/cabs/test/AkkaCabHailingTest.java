@@ -2,6 +2,8 @@ package pods.cabs.test;
 
 import akka.actor.testkit.typed.javadsl.TestKitJunitResource;
 import akka.actor.testkit.typed.javadsl.TestProbe;
+import akka.actor.typed.ActorSystem;
+import akka.actor.typed.javadsl.Behaviors;
 import akka.cluster.sharding.typed.javadsl.ClusterSharding;
 import akka.cluster.sharding.typed.javadsl.Entity;
 import akka.cluster.sharding.typed.javadsl.EntityRef;
@@ -21,25 +23,16 @@ import com.typesafe.config.ConfigFactory;
 
 //#definition
 public class AkkaCabHailingTest {
-	public static final Config config = ConfigFactory.parseString("akka {\n" +
-			"loggers = [\"akka.event.slf4j.Slf4jLogger\"]\n"
-			+ "loglevel = \"DEBUG\"\n" 
-			+ "logging-filter = \"akka.event.slf4j.Slf4jLoggingFilter\"\n"
-			+ "actor.provider = \"cluster\"\n"
-			+ "actor.allow-java-serialization = on\n"
-			+ "remote.artery.canonical.hostname = \"127.0.0.1\" \n" 
-			+ "remote.artery.canonical.port = 0 \n"
-			+ "cluster.seed-nodes = [\"akka://ClusterSystem@127.0.0.1:25251\", \"akka://ClusterSystem@127.0.0.1:25252\"]\n"
-			+ "cluster.downing-provider-class= \"akka.cluster.sbr.SplitBrainResolverProvider\"\n"
-			+ "persistence.journal.plugin=\"akka.persistence.journal.proxy\"\n" 
-            + "persistence.journal.proxy.target-journal-plugin=\"akka.persistence.journal.leveldb\"\n" 
-            + "persistence.journal.proxy.target-journal-address = \"akka://ClusterSystem@127.0.0.1:25251\"\n" 
-            + "persistence.journal.proxy.start-target-journal = \"off\"\n" 
-            + "}"
-			);
 
 	@ClassRule
-	public static final TestKitJunitResource testKit = new TestKitJunitResource(config);
+	public static final TestKitJunitResource testKit;
+//	public static final TestKitJunitResource testKit = new TestKitJunitResource(config);
+	
+	
+	static { 
+		ActorSystem<Void> actorSystem = ActorSystem.create(Behaviors.empty(), "ClusterSystem", TestInterface.config);
+		testKit = new TestKitJunitResource(actorSystem);
+	}
 	
 	
 	

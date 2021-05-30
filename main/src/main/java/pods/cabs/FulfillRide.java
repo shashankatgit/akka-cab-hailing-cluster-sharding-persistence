@@ -40,6 +40,7 @@ public class FulfillRide extends AbstractBehavior<FulfillRide.Command> {
 	}
 
 	public static class Command implements CborSerializable {
+		public Command() {}
 	}
 
 	public static class RideAcceptedInternal extends Command {
@@ -49,6 +50,9 @@ public class FulfillRide extends AbstractBehavior<FulfillRide.Command> {
 			super();
 			this.accepted = accepted;
 		}
+		
+		public RideAcceptedInternal() {}
+		
 	}
 
 	// Define message handlers here
