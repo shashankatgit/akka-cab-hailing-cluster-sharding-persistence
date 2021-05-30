@@ -52,7 +52,7 @@ public class AkkaCabHailingTestPersistence {
 		System.out.println(Logger.ANSI_PURPLE + "\n\n----------Starting New Test Case - Persistence" + " ----------------\n" + Logger.ANSI_RESET); 
 		testInterface.sleep();
 		
-		EntityRef<Cab.Command> cab101 = testInterface.getCabEntityRef("103");
+		EntityRef<Cab.Command> cab101 = testInterface.getCabEntityRef("101");
 		TestProbe<Cab.DebugCabStateResponse> debugProbe = testKit.createTestProbe();
 		cab101.tell(new Cab.DebugCabState(debugProbe.getRef()));
 		Cab.DebugCabStateResponse debugResponse = debugProbe.receiveMessage();
