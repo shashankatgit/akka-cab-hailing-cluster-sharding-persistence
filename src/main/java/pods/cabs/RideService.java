@@ -58,7 +58,7 @@ public class RideService extends AbstractBehavior<RideService.Command> {
 					FulfillRide.create(rideId, requestRideCommand.custId, requestRideCommand.sourceLoc,
 							requestRideCommand.destinationLoc, requestRideCommand.replyTo),
 					fulfilRideActorName);
-			Logger.log(entityId + " : Spawned a FulfillRide actor with id: " + fulfilRideActorName);
+			Logger.log(entityId + " : Spawned a FulfillRide actor with id: " + fulfilRideActorName + " for rideId: "+rideId);
 			
 			fRideActorRef.tell(new FulfillRide.Command());
 		} else {

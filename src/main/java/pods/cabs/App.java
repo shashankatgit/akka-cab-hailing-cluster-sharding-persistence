@@ -3,6 +3,7 @@ package pods.cabs;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -65,6 +66,9 @@ public class App {
 			overrides.put("akka.persistence.journal.plugin", "akka.persistence.journal.proxy");
 
 		}
+		
+		// Initialize Global atomic counter with different prefixes on different nodes
+		Globals.rideIdSequence = new AtomicLong((port-25250)*100000);
 
 		String nodeName;
 
